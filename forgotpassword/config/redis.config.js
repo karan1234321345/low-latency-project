@@ -1,17 +1,11 @@
 import Redis from "ioredis";
-import {redisConfig} from "../grpc/worker/redisConfig.worker.js";
-import {config} from "dotenv";
-config();
+let data;
 
-const host = process.env.REDIS_HOST || "localhost";
-const port = process.env.REDIS_PORT || 6379;
-const username = process.env.REDIS_USER_NAME;
-const password = process.env.REDIS_PASSWORD;
-let configuration;
+export function connectRedis(configuration) {
+    data = new Redis(configuration);
+    console.log("redis connected");
+}
 
-;(async () => {
-    configuration = await redisConfig();
-})()
-
-
-export const dataCache = new Redis(configuration);
+export function getDataCache() {
+    return data;
+}

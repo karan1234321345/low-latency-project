@@ -208,7 +208,7 @@ export function grpcRedisConfig() {
     )
 };
 
-export function kafkaConfig() {
+export function grpcKafkaConfig() {
     return new Promise(
         (resolve,reject)=>{
             try {

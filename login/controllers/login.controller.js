@@ -1,21 +1,15 @@
 import {errorResponse,customResponse} from "../helpers/Response.helper.js";
-import {dataCache} from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 import {sendOtpProduceMessage} from "../utils/sendOtp.util.js";
 import {generateOtp} from "../helpers/generateOtp.helper.js";
 import {verifyPassword} from "../grpc/worker/verifyPassword.worker.js";
 import {User} from "../schema/user.modle.js";
 import {hash} from "../security/hashOnHmac.security.js";
-
-
-const hmacKeys = {
-    newKeyVersion:"v2",
-    oldKeyVersion:"v1",
-    v2:"helloBhai",
-    v1:"helloBhai",
-};
-
+import {variable} from "../env/main.env.js";
 export async function handleLogin(req,reply) {
     try {
+        const dataCache = getDataCache();
+        const hmacKeys = variable.hmacKeys;
         const {userId,password,deviceFingerPrint} = req.body;
         const data = await dataCache.get(`user:${userId}`);
         if (data) {

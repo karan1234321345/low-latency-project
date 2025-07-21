@@ -3,34 +3,15 @@ import {hash} from "../security/hashOnHmac.security.js";
 import {verifyHmac} from "../security/verifyOnHmac.security.js";
 import {findLocation} from "../utils/findLocation.util.js";
 import {LoginDetail} from "../schema/loginDetail.modle.js";
-import {dataCache} from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 import jwt from "jsonwebtoken";
-import {config} from "dotenv";
-config();
-
-const hmacKeys = {
-    newKeyVersion:"v2",
-    oldKeyVersion:"v1",
-    v2:"helloBhai",
-    v1:"helloBhai",
-};
-
-const accessTokenKey = {
-    newKeyVersion:"v2",
-    oldKeyVersion:"v1",
-    v2:"helloBhai",
-    v1:"helloBhai",
-};
-
-const refreshTokenKey = {
-    newKeyVersion:"v2",
-    oldKeyVersion:"v1",
-    v2:"helloBhai",
-    v1:"helloBhai",
-};
-
+import {variable} from "../env/main.env.js";
 export async function handlerVerifyOtpLogin(req,reply) {
     try {
+        const dataCache = getDataCache();
+        const hmacKeys = variable.hmacKeys;
+        const accessTokenKey = variable.accessTokenKeys;
+        const refreshTokenKey = variable.refreshTokenKeys;
         const {userId,otp,deviceFingerPrint} = req.body;
         const cache = await dataCache.get(`login:${userId}`);
         if (!cache) {

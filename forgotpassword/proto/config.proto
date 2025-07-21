@@ -43,5 +43,5 @@ message kafkaConfigRequest {
 
 message kafkaConfigResponse {
     string clientId = 1;
-    string broker = 2;
+    repeated string brokers = 2;
 };

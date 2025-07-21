@@ -1,36 +1,18 @@
 import { errorResponse, customResponse } from "../helpers/Response.helper.js";
-import {dataCache} from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 import {hash} from "../security/hashOnHmac.security.js";
 import {findLocation} from "../utils/findLocation.util.js";
-import {config} from "dotenv";
 import jwt from "jsonwebtoken";
 import {verifyPassword} from "../grpc/worker/verifyPassword.worker.js"
 import {LoginDetail} from "../schema/loginDetail.modle.js";
 import { verifyHmac } from "../security/verifyOnHmac.security.js";
-config();
-const hmacKeys = {
-    newKeyVersion:"v2",
-    oldKeyVersion:"v1",
-    v2:"helloBhai",
-    v1:"helloBhai",
-};
-
-const accessTokenKey = {
-    newKeyVersion:"v2",
-    oldKeyVersion:"v1",
-    v2:"helloBhai",
-    v1:"helloBhai",
-};
-
-const refreshTokenKey = {
-    newKeyVersion:"v2",
-    oldKeyVersion:"v1",
-    v2:"helloBhai",
-    v1:"helloBhai",
-};
-
+import {variable} from "../env/main.env.js";
 export async function handleTfa(req, reply) {
     try {
+        const dataCache = getDataCache();
+        const hmacKeys = variable.hmacKeys;
+        const accessTokenKey = variable.accessTokenKeys;
+        const refreshTokenKey = variable.refreshTokenKeys;
         const {userId,securityKey,deviceFingerPrint} = req.body;
         const stringData = await dataCache.get(`login:${userId}`);
         if (!stringData) {

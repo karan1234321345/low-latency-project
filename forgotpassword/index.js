@@ -2,21 +2,23 @@ import {config} from "dotenv";
 import fastify from "fastify";
 import {masterRoute} from "./routes/master.route.js";
 import {connectDB} from "./database/connect.db.js";
-import {kafka} from "./config/kafka.config.js";
+import {kafkaConnect} from "./config/kafka.config.js";
+import {loadEnv} from "./env/inject.env.js";
+import {variable} from "./env/main.env.js";
+import {connectRedis} from "./config/redis.config.js";
 config();
 
 const app = fastify();
-const producer = kafka.producer();
-app.register(masterRoute, { prefix: "/api/v1" });
+const port = process.env.FASTIFY_FORGOT_PASSWORD_SERVER_PORT || 3001;
 
-const port = process.env.PORT || 3001;
-const uri = process.env.MONGO_URI || "mongodb+srv://karan1234:IfaKOAFO4caFGwg3@cluster0.teulk.mongodb.net/?retryWrites=true&w=majority&appName=chilandu";
-const REDIS_URI = process.env.REDIS_PORT || "redis://localhost:6379";
 
-(async () => {
+;(async () => {
     try {
-        // await loadKey()
-        await connectDB(uri);
+        await loadEnv();
+        await connectDB(variable.mongoDbUrl);
+        await kafkaConnect(variable.kafkaConfig);
+        connectRedis(variable.redisConfig);
+        app.register(masterRoute, { prefix: "/api/v1" });
         app.listen(
             {port},
             (err,address)=>{

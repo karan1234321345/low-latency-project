@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package argon.v1;
+
+service ArgonService {
+    rpc hashPassword (hashPasswordRequest) returns (hashPasswordResponse);
+    rpc verifyPassword (verifyPasswordRequest) returns (verifyPasswordResponse);
+};
+
+message hashPasswordRequest {
+    string password = 1;
+};
+
+message hashPasswordResponse {
+    string hashedPassword = 1;
+};
+
+message verifyPasswordRequest {
+    string hashedPassword = 1;
+    string password = 2;
+};
+
+message verifyPasswordResponse {
+    bool matched = 1;
+};

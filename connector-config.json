@@ -1,0 +1,13 @@
+{
+  "name": "mongo-source-connector",
+  "config": {
+    "connector.class": "com.mongodb.kafka.connect.MongoSourceConnector",
+    "tasks.max": "1",
+    "connection.uri": "mongodb+srv://karan1234:IfaKOAFO4caFGwg3@cluster0.teulk.mongodb.net/chilandu?retryWrites=true&w=majority&appName=chilandu",
+    "database": "chilandu",
+    "collection": "users",
+    "topic.name": "mongo_atlas.chilandu.users",
+    "output.format.key": "json",
+    "output.format.value": "json"
+  }
+}

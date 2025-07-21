@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package configManagement.v1;
+
+service ConfigManagementService {
+    rpc preloadHotKeys (preloadHotKeysRequest) returns (preloadHotKeysResponse);
+    rpc keyByVersion (keyByVersionRequest) returns (keyByVersionResponse);
+    rpc mongoDbUrl (mongoDbUrlRequest) returns (mongoDbUrlResponse);
+    rpc redisConfig (redisConfigRequest) returns (redisConfigResponse);
+};
+
+message preloadHotKeysRequest {
+};
+
+message preloadHotKeysResponse {
+    string newRefreshTokenKey = 1;
+    string oldRefreshTokenKey = 2;
+    string newAccessTokenKey = 3;
+    string oldAccessTokenKey = 4;
+    string newHmacSecretKey = 5;
+    string oldHmacSecretKey = 6;
+};
+
+message keyByVersionRequest {
+    string version = 1;
+};
+
+message keyByVersionResponse {
+    string key = 1;
+};
+
+message mongoDbUrlRequest {
+};
+
+message mongoDbUrlResponse {
+    string url = 1;
+};
+
+message redisConfigRequest {
+};
+
+message redisConfigResponse {
+    string host = 1;
+    int32 port = 2;
+    string dbUsername = 3;
+    string dbPassword = 4;
+};

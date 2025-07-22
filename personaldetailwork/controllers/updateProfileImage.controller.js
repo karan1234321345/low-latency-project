@@ -1,8 +1,9 @@
 import { errorResponse, customResponse } from "../helpers/Response.helper.js";
 import { User } from "../schema/user.modle.js";
-import { dataCache } from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 export async function handleUpdateProfileImageUrl(req, reply) {
     try {
+        const dataCache = getDataCache();
         const { userId, profileImageUrl } = req.body;
         const userIndb = await User.findOneAndUpdate({ userId }, { $set: { profileImage: profileImageUrl } }, { new: true });
         if (!userIndb) {

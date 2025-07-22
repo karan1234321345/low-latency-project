@@ -1,5 +1,5 @@
 export function errorResponse(reply,message="internal server error") {
-    return reply.status(500).send({message,data:null});
+    return reply.status(500).send({message:message,data:null});
 };
 
 export function insufficientDataResponse(reply) {
@@ -12,5 +12,5 @@ export function successResponse(reply,data) {
 };
 
 export function customResponse(reply,status,message,data) {
-    return reply.status(status).send({message,data:data})
+    return reply.status(status).send({message:message,data:data})
 };

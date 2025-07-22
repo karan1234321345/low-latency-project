@@ -1,11 +1,26 @@
 import { Kafka } from 'kafkajs';
-import {config} from "dotenv";
-config();
 
-const kafkaBrocker = process.env.KAFKA_BROKER || "localhost:9092";
-const kafkaClientId = process.env.KAFKA_CLIENT_ID || "send-otp-producer";
-export const kafka = new Kafka({
-    clientId: `${kafkaClientId}`,
-    brokers: [`${kafkaBrocker}`], 
-});
+let kafkaProducerCache;
 
+export async function kafkaConnect(configuration) {
+    try {
+        if (!Array.isArray(configuration.brokers)) {
+            if (typeof configuration.brokers === "string" && configuration.brokers.length > 0) {
+                configuration.brokers = [configuration.brokers];
+            } else {
+                throw new Error("Kafka brokers configuration is invalid or missing");
+            }
+        }
+        const kafkaClient = new Kafka(configuration);
+        kafkaProducerCache = kafkaClient.producer();
+        await kafkaProducerCache.connect();
+        console.log("kafka connected");
+    } catch (error) {
+        console.log("error in the kafka configurattion", error.message);
+        process.exit(-1);
+    }
+};
+
+export function kafkaProducer() {
+    return kafkaProducerCache;
+}

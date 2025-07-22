@@ -1,25 +1,34 @@
-import {checkToken} from "../helpers/checkToken.helper.js";
+import {extractTokenFromBearer} from "./extractToken.util.js";
 import {verifyToken} from "../helpers/verifyToken.helper.js";
-import {errorResponse,customResponse} from "../helpers/Response.helper.js";
-import {config} from "dotenv";
-import {verifyHmac} from "../security/verifyOnHmac.security.js";
-config();
-const accessTokenKey = process.env.ACCESS_TOKEN_KEY || "helloBhai";
-const hmacSecretKey = process.env.HMAC_SECRET_KEY || "helloBhai";
+import {checkBody} from "../helpers/checkBody.helper.js";
+import {errorResponse,customResponse,insufficientDataResponse} from "../helpers/Response.helper.js";
+import {variable} from "../env/main.env.js";
+import {verifyDevicehash} from "../helpers/verifyDevicehash.helper.js";
 
 export function authenticateApi(req,reply,done) {
     try {
-        const token = checkToken(req);
+        const accessTokenKeys = variable.accessTokenKeys;
+        const hmacKeys = variable.hmacKeys;
+        if (!checkBody(req)) {
+            return insufficientDataResponse(reply);
+        };
+        const {deviceFingerPrint} = req.body;
+        if (!deviceFingerPrint) {
+            return insufficientDataResponse(reply);
+        };
+        const bearerToken = req.headers.authorization;
+        const token = extractTokenFromBearer(bearerToken);
         if (!token) {
-            return customResponse(reply,401,"invalid token or token not found",{});
+            return customResponse(reply,400,"token not found",{});
         };
-        const data = verifyToken(token,accessTokenKey);
-        if (!data) {
-            return customResponse(reply,403,"token is invalid");
+        const tokenData = verifyToken(token,accessTokenKeys);
+        if (!tokenData.status) {
+            return customResponse(reply,400,tokenData.message,{});
         };
-        const compare = verifyHmac(hmacSecretKey,req.body.deviceFingerPrint,data.devicehash);
-        if (!compare) {
-            return customResponse(reply,402,"unauthorized",{});
+        const data = tokenData.data;
+        const verifyDevice = verifyDevicehash(deviceFingerPrint,tokenData.devicehash,hmacKeys);
+        if (!verifyDevice.status) {
+            return customResponse(reply,400,verifyDevice.message,{})
         };
         req.body.userId = data.userId;
         return done();        

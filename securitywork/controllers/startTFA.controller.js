@@ -1,5 +1,5 @@
 import {errorResponse,customResponse} from "../helpers/Response.helper.js";
-import {dataCache} from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 import {generateOtp} from "../helpers/generateOtp.helper.js";
 import {sendOtpProduceMessage} from "../utils/sendOtp.util.js";
 import argon2 from "argon2";
@@ -7,6 +7,7 @@ import {User} from "../schema/user.modle.js";
 
 export async function handleStartTFA(req,reply) {
     try {
+        const dataCache = getDataCache();
         const {userId,securityKey} = req.body;
         let data = await dataCache.get(`user:${userId}`);
         if (!data) {

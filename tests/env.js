@@ -9,11 +9,11 @@ const consumer = kafka.consumer({ groupId: 'mongo-consumer-group' });
 
 async function run() {
   await consumer.connect();
-  await consumer.subscribe({ topic: 'chilandu.users', fromBeginning: true });
+  await consumer.subscribe({ topic: 'test.users', fromBeginning: true });
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log(JSON.parse(message.value));
+      console.log(message.value.toString());
     },
   });
 }

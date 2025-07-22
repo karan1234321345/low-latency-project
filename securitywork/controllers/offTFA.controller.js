@@ -1,11 +1,12 @@
 import {errorResponse,customResponse} from "../helpers/Response.helper.js";
-import {dataCache} from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 import {generateOtp} from "../helpers/generateOtp.helper.js";
 import {sendOtpProduceMessage} from "../utils/sendOtp.util.js";
 import {User} from "../schema/user.modle.js";
 
 export async function handleOffTFA(req,reply) {
     try {
+        const dataCache = getDataCache();
         const {userId} = req.body;
         let data = await dataCache.get(`user:${userId}`);
         if (!data) {

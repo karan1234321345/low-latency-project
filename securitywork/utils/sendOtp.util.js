@@ -1,10 +1,9 @@
-import { kafka } from "../config/kafka.config.js";
+import { kafkaProducer } from "../config/kafka.config.js";
 
-const producer = kafka.producer();
 
 export async function sendOtpProduceMessage(to, subject, data) {
     try {
-        await producer.connect();
+        const producer = kafkaProducer();
         await producer.send({
             topic: 'send-otp',
             messages: [

@@ -1,10 +1,11 @@
 import {User} from "../schema/user.modle.js";
 import {LoginDetail} from "../schema/loginDetail.modle.js";
 import {errorResponse,customResponse} from "../helpers/Response.helper.js";
-import {dataCache} from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 
 export async function handleGetAllPersonalDetail(req,reply) {
     try {
+        const dataCache = getDataCache();
         const {userId} = req.body;
         let user = await dataCache.get(`user:${userId}`);
         if (!user) {

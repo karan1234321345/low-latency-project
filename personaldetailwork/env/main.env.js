@@ -1,0 +1,23 @@
+export let variable = {
+    accessTokenKeys:{
+        newKeyVersion:"",
+        oldKeyVersion:"",
+    },
+    refreshTokenKeys:{
+        newKeyVersion:"",
+        oldKeyVersion:"",
+    },
+    hmacKeys:{
+        newKeyVersion:"",
+        oldKeyVersion:"",
+    },
+    redisConfig:{
+        port:"",
+        host:"",
+    },
+    kafkaConfig:{
+        clientId:"",
+        brokers:"",
+    },
+    mongoDbUrl:"",
+}

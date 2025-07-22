@@ -3,10 +3,10 @@
   "config": {
     "connector.class": "com.mongodb.kafka.connect.MongoSourceConnector",
     "tasks.max": "1",
-    "connection.uri": "mongodb+srv://karan1234:IfaKOAFO4caFGwg3@cluster0.teulk.mongodb.net/chilandu?retryWrites=true&w=majority&appName=chilandu",
-    "database": "chilandu",
+    "connection.uri": "mongodb+srv://karan1234:IfaKOAFO4caFGwg3@cluster0.teulk.mongodb.net/?retryWrites=true&w=majority&appName=chilandu",
+    "database": "test",
     "collection": "users",
-    "topic.name": "mongo_atlas.chilandu.users",
+    "topic.name": "test.users",
     "output.format.key": "json",
     "output.format.value": "json"
   }

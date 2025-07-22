@@ -7,11 +7,11 @@ export function verifyHmac(secret, message, receivedHmac) {
         actual = Buffer.from(receivedHmac, 'hex');
     } catch {
         return false; 
-    };
+    }
     if (actual.length !== expectedHmac.length) return false;
     try {
-        return timingSafeEqual(expectedHmac, actual); // ✅ true if matches
+        return timingSafeEqual(expectedHmac, actual);
     } catch {
         return false;
-    };
-};
+    }
+}

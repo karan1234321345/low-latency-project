@@ -1,9 +1,10 @@
 import {errorResponse,customResponse} from "../helpers/Response.helper.js";
-import {dataCache} from "../config/redis.config.js";
+import {getDataCache} from "../config/redis.config.js";
 import {User} from "../schema/user.modle.js";
 
 export async function handleVerifyTFAOtp(req,reply) {
     try {
+        const dataCache = getDataCache();
         const {userId,otp} = req.body;
         const stringData = await dataCache.get(`twa:${userId}`);
         if (!stringData) {

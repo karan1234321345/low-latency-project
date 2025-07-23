@@ -9,13 +9,6 @@ export function authenticateApi(req,reply,done) {
     try {
         const accessTokenKeys = variable.accessTokenKeys;
         const hmacKeys = variable.hmacKeys;
-        if (!checkBody(req)) {
-            return insufficientDataResponse(reply);
-        };
-        const {deviceFingerPrint} = req.body;
-        if (!deviceFingerPrint) {
-            return insufficientDataResponse(reply);
-        };
         const bearerToken = req.headers.authorization;
         const token = extractTokenFromBearer(bearerToken);
         if (!token) {
